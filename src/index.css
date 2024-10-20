@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+h1 {
+  font-family: "Berkshire Swash", serif;
+}
