@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { useEffect, useState } from "react";
-import MyContext from "./myContext";
+import MyContext from "./myContext.jsx";
 import {
   collection,
   deleteDoc,
