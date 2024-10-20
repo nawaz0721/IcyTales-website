@@ -1,85 +1,88 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 export const CartContext = createContext();
 
 function CartContextProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
-  const [wishListItems, setWishListItems] = useState([]);
+  // Initialize cart and wishlist from localStorage or as empty arrays
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  const [wishListItems, setWishListItems] = useState(() => {
+    const savedWishList = localStorage.getItem("wishListItems");
+    return savedWishList ? JSON.parse(savedWishList) : [];
+  });
+
+  // Use effect to update localStorage whenever cartItems change
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
+    localStorage.setItem("wishListItems", JSON.stringify(wishListItems));
+  }, [wishListItems]);
 
   function addToCart(item) {
-    const arr = cartItems;
-    // Add item to cart
-    const itemIndex = cartItems.findIndex((data) => data.id == item.id);
-    if (itemIndex == -1) {
+    const arr = [...cartItems];
+    const itemIndex = cartItems.findIndex((data) => data.id === item.id);
+    if (itemIndex === -1) {
       arr.push({ ...item, quantity: 1 });
-      toast.success("Add to cart");
+      toast.success("Added to cart");
     } else {
       arr[itemIndex].quantity++;
     }
-    setCartItems([...arr]);
+    setCartItems(arr);
   }
 
   function lessQuantityToCart(id) {
-    const arr = cartItems;
-    const itemIndex = cartItems.findIndex((data) => data.id == id);
-    arr[itemIndex].quantity--;
-    setCartItems([...arr]);
+    const arr = [...cartItems];
+    const itemIndex = cartItems.findIndex((data) => data.id === id);
+    if (itemIndex !== -1 && arr[itemIndex].quantity > 1) {
+      arr[itemIndex].quantity--;
+      setCartItems(arr);
+    }
   }
 
   function removeItemFromCart(id) {
-    const arr = cartItems;
-    const itemIndex = cartItems.findIndex((data) => data.id == id);
-    arr.splice(itemIndex, 1);
-    toast.success("Delete cart");
-    setCartItems([...arr]);
+    const arr = cartItems.filter((item) => item.id !== id);
+    toast.success("Item removed from cart");
+    setCartItems(arr);
   }
 
   function isItemAdded(id) {
-    const arr = cartItems;
-    const itemIndex = cartItems.findIndex((data) => data.id == id);
-    if (itemIndex == -1) {
-      return null;
-    } else {
-      return arr[itemIndex];
-    }
+    return cartItems.find((item) => item.id === id) || null;
   }
 
   function addToWishList(item) {
-    const arr = wishListItems;
-    // Add item to wish list
-    const itemIndex = wishListItems.findIndex((data) => data.id == item.id);
-    if (itemIndex == -1) {
+    const arr = [...wishListItems];
+    const itemIndex = wishListItems.findIndex((data) => data.id === item.id);
+    if (itemIndex === -1) {
       arr.push({ ...item, quantity: 1 });
+      toast.success("Added to wishlist");
     } else {
-      arr[itemIndex].quantity++;
-      removeItemFromWishList();
+      removeItemFromWishList(item.id);
     }
-    setWishListItems([...arr]);
+    setWishListItems(arr);
   }
 
   function lessQuantityToWishList(id) {
-    const arr = wishListItems;
-    const itemIndex = wishListItems.findIndex((data) => data.id == id);
-    arr[itemIndex].quantity--;
-    setWishListItems([...arr]);
+    const arr = [...wishListItems];
+    const itemIndex = wishListItems.findIndex((data) => data.id === id);
+    if (itemIndex !== -1 && arr[itemIndex].quantity > 1) {
+      arr[itemIndex].quantity--;
+      setWishListItems(arr);
+    }
   }
 
   function removeItemFromWishList(id) {
-    const arr = wishListItems;
-    const itemIndex = wishListItems.findIndex((data) => data.id == id);
-    arr.splice(itemIndex, 1);
-    setWishListItems([...arr]);
+    const arr = wishListItems.filter((item) => item.id !== id);
+    setWishListItems(arr);
   }
 
   function isItemAddedToWishList(id) {
-    const arr = wishListItems;
-    const itemIndex = wishListItems.findIndex((data) => data.id == id);
-    if (itemIndex == -1) {
-      return null;
-    } else {
-      return arr[itemIndex];
-    }
+    return wishListItems.find((item) => item.id === id) || null;
   }
 
   return (

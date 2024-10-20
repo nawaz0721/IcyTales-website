@@ -1,12 +1,10 @@
+import React from "react";
 import { Image } from "@nextui-org/react";
-import Navbar from "../components/Navbar";
 import banner1 from "../images/Section.png";
 import banner2 from "../images/Section 2.png";
-import heading from "../images/Our Popular heading.png";
 import ProductSlider from "../components/ProductSlider";
 import GelatoCategories from "../components/GelatoCategories";
 import SignUpForm from "../components/SignUpForm";
-import Footer from "../components/Footer";
 
 const Home = () => {
   return (

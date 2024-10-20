@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Heading 1 → Checkout.png";
 import heading2 from "../images/Background+Shadow(checkout).png";
 import { CartContext } from "../context/CartContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,7 +22,7 @@ const CheckoutForm = () => {
     const { firstName, lastName, email, address, city } = billingInfo;
 
     const itemsDetails = cartItems
-      .map((item) => `${item.quantity} x ${item.name} @ $${item.price}`)
+      .map((item) => `${item.quantity} x ${item.title} @ $${item.price}`)
       .join("%0a");
 
     const url =
@@ -57,13 +56,10 @@ const CheckoutForm = () => {
       "Total Price: $" +
       (itemsPrice + shippingCost).toFixed(2);
 
-    // Send message to WhatsApp
     window.open(url, "_blank").focus();
 
-    // Submit order to Firebase
     submitOrderToFirebase();
 
-    // Redirect and reset cart
     neg("/thankyou");
     setCartItems([]);
   }
@@ -286,4 +282,3 @@ const CheckoutForm = () => {
 };
 
 export default CheckoutForm;
-

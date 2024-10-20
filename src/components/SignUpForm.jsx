@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import heading from "../images/Sign up For Exclusive Deals and Updates.png";
 
 const SignUpForm = () => {
   const [email, setEmail] = useState("");

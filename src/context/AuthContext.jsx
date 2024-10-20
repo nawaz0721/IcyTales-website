@@ -1,3 +1,4 @@
+import React from "react";
 import { Spinner } from "@nextui-org/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";

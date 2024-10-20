@@ -1,14 +1,11 @@
+import React from "react";
 import TopSlider from "../components/TopSlider";
-import heading from "../images/Heading 1 → About Us.png";
 import button from "../images/Background+Shadow.png";
 import image1 from "../images/Figure → journey-image.jpg.png";
-import heading1 from "../images/Our Journey Began With a Simple Dream.png";
-import heading2 from "../images/Our Mission is to Create Moments.png";
 import image2 from "../images/Figure → special-rightimage.png.png";
 import image3 from "../images/Image(1).png";
 import Button from "../components/Button";
 import SignUpForm from "../components/SignUpForm";
-import Footer from "../components/Footer";
 import Statistics from "../components/Statistics";
 import TeamSlider from "../components/TeamSlider";
 

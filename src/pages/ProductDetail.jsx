@@ -4,12 +4,13 @@ import { FaHeart } from "react-icons/fa";
 import NotFound from "./NotFound";
 import myContext from "../context/myContext";
 import { CartContext } from "../context/CartContext";
-import heading1 from "../images/Heading 1 → Single Product Layout 01.png";
 import heading2 from "../images/Background+Shadow(product detail).png";
 import heading from "../images/Related Products.png";
 import ProductsTabs from "../components/ProductsTabs";
 import ProductSlider from "../components/ProductSlider";
 import TopSlider from "../components/TopSlider";
+import { auth } from "../utils/firebase";
+import toast from "react-hot-toast";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -30,12 +31,10 @@ const ProductDetail = () => {
 
   console.log(product);
 
-  // getProductData
   const getProductData = async () => {
     setLoading(true);
     try {
       const productTemp = await getDoc(doc(fireDB, "products", id));
-      // console.log({...productTemp.data(), id : productTemp.id})
       setProduct({ ...productTemp.data(), id: productTemp.id });
       setLoading(false);
     } catch (error) {
@@ -122,38 +121,49 @@ const ProductDetail = () => {
               <span className="text-lg">{quantity}</span>
               <button
                 className="px-4 py-2 bg-gray-300 text-gray-700 rounded"
-                onClick={increaseQuantity}
+                onClick={() => {
+                  {
+                    auth.currentUser.email !== "admin@gmail.com" ||
+                    !auth.currentUser
+                      ? increaseQuantity()
+                      : toast.error("Admin can not buy any item");
+                  }
+                }}
               >
                 +
               </button>
             </div>
 
-            {quantity == 1 ? (
-              <Link to={"/cart"}>
-                <button className="w-1/2 py-3 bg-pink-500 text-white rounded-lg mb-4">
-                  Buy Now
-                </button>
-              </Link>
-            ) : (
-              <button
-                disabled
-                className="w-1/2 py-3 bg-gray-700 text-white rounded-lg mb-4 "
-              >
-                Buy Now
-              </button>
-            )}
+            <button
+              className="w-1/2 py-3 bg-pink-500 text-white rounded-lg mb-4"
+              onClick={() => {
+                {
+                  auth.currentUser.email !== "admin@gmail.com" ||
+                  !auth.currentUser
+                    ? navigate("/cart")
+                    : toast.error("Admin can not buy any item");
+                }
+              }}
+            >
+              Buy Now
+            </button>
 
             <div className="flex justify-between text-pink-500">
               <button
-                className="underline"
+                className=""
                 onClick={() => {
-                  addToWishList(icecreamproduct);
+                  {
+                    auth.currentUser.email !== "admin@gmail.com" ||
+                    !auth.currentUser
+                      ? addToWishList(icecreamproduct)
+                      : toast.error("Admin can not to add washlist");
+                  }
                 }}
               >
                 {isItemAddedToWishList(icecreamproduct.id) ? (
-                  <span>Remove from wishlist</span>
+                  <span>Wishlist Added</span>
                 ) : (
-                  <span className="flex items-center">
+                  <span className="flex items-center underline">
                     <FaHeart className="text-pink-700" size={18} /> Add to
                     Wishlist
                   </span>

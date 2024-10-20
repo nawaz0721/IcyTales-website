@@ -1,6 +1,5 @@
 import React from "react";
 import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Privacy Policy.png";
 import heading2 from "../images/Background+Shadow(policy).png";
 
 const Policy = () => {

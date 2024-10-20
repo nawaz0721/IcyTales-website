@@ -1,7 +1,6 @@
+import React from "react";
 import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Heading 1 → Our Team.png";
 import heading2 from "../images/Background+Shadow(team).png";
-import heading3 from "../images/Our Team Members.png";
 import image1 from "../images/Figure → team-image1.jpg.png";
 import image2 from "../images/Figure → team-image2.jpg.png";
 import image3 from "../images/Figure → team-image3.jpg.png";

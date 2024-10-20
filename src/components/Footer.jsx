@@ -1,3 +1,4 @@
+import React from "react";
 import { CiLocationOn } from "react-icons/ci";
 import logo from "../images/Link.png";
 import { HiOutlineMailOpen } from "react-icons/hi";

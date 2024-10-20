@@ -3,11 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import myContext from "../context/myContext";
 import { CartContext } from "../context/CartContext";
 import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Heading 1 → Shop Layout 01.png";
 import heading2 from "../images/Background+Shadow(shop).png";
 import NotFoundProduct from "../components/NotFoundProduct";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import { Badge } from "@nextui-org/react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import toast from "react-hot-toast";
 
 const categories = [
   { name: "All" },
@@ -27,7 +29,6 @@ const ITEMS_PER_PAGE = 6;
 
 const IceCreamShop = () => {
   const navigate = useNavigate();
-
   const context = useContext(myContext);
   const { getAllProduct, loading } = context;
 
@@ -37,6 +38,7 @@ const IceCreamShop = () => {
     addToWishList,
     isItemAddedToWishList,
     cartItems,
+    setCartItems, // Ensure you have a setCartItems function in your CartContext
   } = useContext(CartContext);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,12 +49,24 @@ const IceCreamShop = () => {
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
 
+  // Load cart from localStorage on component mount
+  useEffect(() => {
+    const savedCartItems = localStorage.getItem("cart");
+    if (savedCartItems) {
+      setCartItems(JSON.parse(savedCartItems));
+    }
+  }, []);
+
+  // Sync cartItems to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   useEffect(() => {
     if (getAllProduct.length > 0) {
       filterProducts();
     }
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [getAllProduct, searchTerm, selectedCategory, priceRange, cartItems]);
+  }, [getAllProduct, searchTerm, selectedCategory, priceRange]);
 
   const filterProducts = () => {
     const filtered = getAllProduct.filter((product) => {
@@ -82,14 +96,25 @@ const IceCreamShop = () => {
     startIndex + ITEMS_PER_PAGE
   );
 
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      console.log("User is signed In");
+      // ...
+    } else {
+      // User is signed out
+      console.log("User is signed out");
+      // ...
+    }
+  });
+  console.log(auth.currentUser?.email);
+
   return (
     <>
       <TopSlider image1={"Shop"} image2={heading2} />
       <div className="container mx-auto p-6">
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Sidebar */}
           <div className="w-full md:w-1/4">
-            {/* Search Bar */}
             <div className="mb-8">
               <input
                 type="text"
@@ -137,7 +162,6 @@ const IceCreamShop = () => {
             </div>
           </div>
 
-          {/* Product Grid */}
           <div className="w-full md:w-3/4">
             {loading ? (
               <div className="text-center py-10">Loading products...</div>
@@ -154,11 +178,18 @@ const IceCreamShop = () => {
                           className="rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
                         >
                           <div className="h-auto">
-                            <div className="relative  border-solid border-2 border-pink-500 h-[220px] rounded-lg">
+                            <div className="relative border-solid border-2 border-pink-500 h-[220px] rounded-lg">
                               <button
-                                className="absolute top-2 right-2 p-2 rounded-full "
+                                className="absolute top-2 right-2 p-2 rounded-full"
                                 onClick={() => {
-                                  addToWishList(data);
+                                  {
+                                    auth.currentUser.email !==
+                                      "admin@gmail.com" || !auth.currentUser
+                                      ? addToWishList(data)
+                                      : toast.error(
+                                          "Admin can not to add washlist"
+                                        );
+                                  }
                                 }}
                               >
                                 {isItemAddedToWishList(data.id) ? (
@@ -169,7 +200,7 @@ const IceCreamShop = () => {
                                 ) : (
                                   <FaHeart
                                     size={30}
-                                    className="absolute top-2 right-2   text-gray-300"
+                                    className="absolute top-2 right-2 text-gray-300"
                                   />
                                 )}
                               </button>
@@ -193,10 +224,13 @@ const IceCreamShop = () => {
                                 <span className="text-xl font-bold text-pink-500">
                                   ${price}
                                 </span>
+
                                 <button
-                                  className="bg-purple-500 text-white p-2  rounded-3xl flex justify-center hover:bg-purple-600"
+                                  className="bg-purple-500 text-white p-2 rounded-3xl flex justify-center hover:bg-purple-600"
                                   onClick={() => {
-                                    addToCart(data);
+                                    auth.currentUser.email !== "admin@gmail.com"
+                                      ? addToCart(data)
+                                      : toast.error("Admin cannot add to cart");
                                   }}
                                 >
                                   {isItemAdded(data.id) ? (

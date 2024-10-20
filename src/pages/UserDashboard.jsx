@@ -1,6 +1,5 @@
-// import Layout from "../../components/layout/Layout";
+import React from "react";
 import { useContext, useEffect, useState } from "react";
-import image1 from "../images/best-image1.jpg.png";
 import myContext from "../context/myContext";
 
 const UserDashboard = () => {
@@ -9,13 +8,17 @@ const UserDashboard = () => {
   const context = useContext(myContext);
   const { loading, getAllOrder } = context;
 
+  const [orderStatuses, setOrderStatuses] = useState({});
+
   useEffect(() => {
-    // This effect could also be used to fetch orders from the API
-    // You could use a setInterval or WebSocket to listen for changes if needed
-  }, [getAllOrder]);
+    const savedStatuses =
+      JSON.parse(localStorage.getItem("orderStatuses")) || {};
+    setOrderStatuses(savedStatuses);
+  }, []);
+
+  const shipping = 20;
 
   return (
-    // <Layout>
     <div className=" container mx-auto px-4 py-5 lg:py-8">
       <div className="top mb-5 px-5 mt-5">
         <div className=" bg-pink-50 py-5 border border-pink-100 rounded-lg">
@@ -24,35 +27,27 @@ const UserDashboard = () => {
           </h2>
         </div>
       </div>
-      {/* Top  */}
       <div className="top ">
-        {/* main  */}
         <div className=" bg-pink-50 py-5 rounded-xl border border-pink-100">
-          {/* image  */}
           <div className="flex justify-center">
             <img
               src="https://cdn-icons-png.flaticon.com/128/2202/2202112.png"
               alt=""
             />
           </div>
-          {/* text  */}
           <div className="">
-            {/* Name  */}
             <h2 className=" text-center text-lg">
               <span className=" font-bold">Name : </span>
               {user?.name}
             </h2>
-            {/* Email  */}
             <h2 className=" text-center text-lg">
               <span className=" font-bold">Email : </span>
               {user?.email}
             </h2>
-            {/* Date  */}
             <h2 className=" text-center text-lg">
               <span className=" font-bold">Date : </span>
               {user?.date}
             </h2>
-            {/* Role  */}
             <h2 className=" text-center text-lg">
               <span className=" font-bold">Role : </span>
               {user?.role}
@@ -60,7 +55,6 @@ const UserDashboard = () => {
           </div>
         </div>
       </div>
-      {/* bottom  */}
       <div className="bottom">
         <div className="mx-auto my-4 max-w-6xl px-2 md:my-6 md:px-0">
           <h2 className="text-2xl lg:text-3xl font-bold">Order Details</h2>
@@ -76,7 +70,12 @@ const UserDashboard = () => {
                     title,
                     productImageUrl,
                     category,
+                    description,
                   } = item;
+
+                  const currentStatus =
+                    orderStatuses[order.id]?.[item.id] || "Pending";
+
                   return (
                     <div
                       key={index}
@@ -99,7 +98,9 @@ const UserDashboard = () => {
                                 Total Amount
                               </div>
                               <div className="text-sm font-medium text-gray-900">
-                                $ {price * quantity}
+                                ${" "}
+                                {(Number(price) || 0).toFixed(2) * quantity +
+                                  shipping}
                               </div>
                             </div>
                             <div className="mb-4">
@@ -107,7 +108,7 @@ const UserDashboard = () => {
                                 Order Status
                               </div>
                               <div className="text-sm font-medium text-green-800 first-letter:uppercase">
-                                {order.status}{" "}
+                                {currentStatus}{" "}
                                 {/* Display the updated status */}
                               </div>
                             </div>
@@ -132,8 +133,12 @@ const UserDashboard = () => {
                                     <p className="text-sm font-bold text-gray-900">
                                       {title}
                                     </p>
+
                                     <p className="mt-1.5 text-sm font-medium text-gray-500">
                                       {category}
+                                    </p>
+                                    <p className="mt-1.5 text-sm font-medium text-gray-500">
+                                      {description}
                                     </p>
                                   </div>
                                   <p className="mt-4 text-sm font-medium text-gray-500">
@@ -143,7 +148,7 @@ const UserDashboard = () => {
                               </div>
                               <div className="ml-auto flex flex-col items-end justify-between">
                                 <p className="text-right text-sm font-bold text-gray-900">
-                                  $ {price}
+                                  {(Number(price) || 0).toFixed(2)}
                                 </p>
                               </div>
                             </li>

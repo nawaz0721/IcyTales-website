@@ -1,6 +1,5 @@
 import React from "react";
 import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Heading 1 → Blog Detail.png";
 import heading2 from "../images/Background+Shadow(blogDetail).png";
 import image1 from "../images/Figure → single-blog-tab-img1.jpg.png";
 import image2 from "../images/Figure → single-blog-tab-img2.jpg.png";
@@ -126,7 +125,7 @@ const BlogsDetails = () => {
 
   return (
     <div>
-      <TopSlider image1={heading1} image2={heading2} />
+      <TopSlider image1={"Blog Detail"} image2={heading2} />
       <BlogDetailCompo blog={blog} />
     </div>
   );

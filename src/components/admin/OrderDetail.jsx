@@ -1,28 +1,38 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import myContext from "../../context/myContext";
 
 const OrderDetail = () => {
   const context = useContext(myContext);
-  const { getAllOrder, deleteProduct } = context;
+  const { getAllOrder } = context;
 
   const [statuses, setStatuses] = useState({});
 
+  useEffect(() => {
+    const savedStatuses =
+      JSON.parse(localStorage.getItem("orderStatuses")) || {};
+    setStatuses(savedStatuses);
+  }, []);
+
   const handleStatusChange = (orderId, itemId, status) => {
-    setStatuses((prevStatuses) => ({
-      ...prevStatuses,
+    const updatedStatuses = {
+      ...statuses,
       [orderId]: {
-        ...(prevStatuses[orderId] || {}),
+        ...(statuses[orderId] || {}),
         [itemId]: status,
       },
-    }));
-  };
+    };
+    setStatuses(updatedStatuses);
 
-  console.log(handleStatusChange());
+    localStorage.setItem("orderStatuses", JSON.stringify(updatedStatuses));
+    console.log(
+      `Status updated for Order ${orderId}, Item ${itemId}: ${status}`
+    );
+  };
   return (
     <div>
       <div>
         <div className="py-5">
-          <h2 className=" text-xl text-pink-300 font-bold">All Order</h2>
+          <h2 className="text-xl text-pink-300 font-bold">All Order</h2>
         </div>
 
         <div className="w-full overflow-x-auto">
@@ -128,7 +138,6 @@ const OrderDetail = () => {
                 </th>
               </tr>
               {getAllOrder.map((order) => {
-                console.log(order);
                 return (
                   <React.Fragment key={order.id}>
                     {order.cartItems.map((item, index) => {
@@ -140,6 +149,8 @@ const OrderDetail = () => {
                         price,
                         quantity,
                       } = item;
+                      const currentStatus =
+                        statuses[order.id]?.[item.id] || "Pending";
                       return (
                         <tr key={index} className="text-pink-300">
                           <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 ">
@@ -163,7 +174,7 @@ const OrderDetail = () => {
                           </td>
 
                           <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
-                            ${price}
+                            ${(Number(price) || 0).toFixed(2)}
                           </td>
 
                           <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
@@ -171,7 +182,7 @@ const OrderDetail = () => {
                           </td>
 
                           <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
-                            ${price * quantity}
+                            ${(Number(price) || 0).toFixed(2) * quantity}
                           </td>
 
                           <td className="h-12 px-6 text-md transition duration-300 border-t border-l text-green-600 first:border-l-0 border-pink-100 text-slate-500">
@@ -181,9 +192,7 @@ const OrderDetail = () => {
                                   type="radio"
                                   name={`status-${order.id}-${item.id}`}
                                   value="Pending"
-                                  checked={
-                                    statuses[order.id]?.[item.id] === "Pending"
-                                  }
+                                  checked={currentStatus === "Pending"}
                                   onChange={() =>
                                     handleStatusChange(
                                       order.id,
@@ -199,9 +208,7 @@ const OrderDetail = () => {
                                   type="radio"
                                   name={`status-${order.id}-${item.id}`}
                                   value="Confirm"
-                                  checked={
-                                    statuses[order.id]?.[item.id] === "Confirm"
-                                  }
+                                  checked={currentStatus === "Confirm"}
                                   onChange={() =>
                                     handleStatusChange(
                                       order.id,
@@ -217,9 +224,7 @@ const OrderDetail = () => {
                                   type="radio"
                                   name={`status-${order.id}-${item.id}`}
                                   value="Deliver"
-                                  checked={
-                                    statuses[order.id]?.[item.id] === "Deliver"
-                                  }
+                                  checked={currentStatus === "Deliver"}
                                   onChange={() =>
                                     handleStatusChange(
                                       order.id,
@@ -232,7 +237,6 @@ const OrderDetail = () => {
                               </label>
                             </div>
                           </td>
-
                           <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
                             {order.billingInfo.firstName +
                               " " +

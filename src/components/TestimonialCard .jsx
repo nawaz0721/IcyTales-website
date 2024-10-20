@@ -1,3 +1,4 @@
+import React from "react";
 import image1 from "../images/Figure → testimonial3-personimage1.jpg.png";
 import image2 from "../images/Figure → testimonial3-personimage2.jpg.png";
 import image3 from "../images/Figure → testimonial3-personimage3.jpg.png";

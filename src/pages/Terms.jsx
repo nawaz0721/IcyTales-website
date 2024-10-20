@@ -1,6 +1,5 @@
 import React from "react";
 import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Heading 1 → Terms & Conditions.png";
 import heading2 from "../images/Background+Shadow(terms).png";
 
 const Terms = () => {

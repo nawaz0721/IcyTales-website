@@ -1,9 +1,6 @@
-import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Heading 1 → Review.png";
-import heading2 from "../images/Background+Shadow(review).png";
-import heading3 from "../images/Hear From Our Gelato Enthusiasts.png";
-
 import React from "react";
+import TopSlider from "../components/TopSlider";
+import heading2 from "../images/Background+Shadow(review).png";
 import TestimonialCard from "../components/TestimonialCard ";
 
 const Review = () => {
@@ -13,7 +10,8 @@ const Review = () => {
       <div>
         <div className="flex flex-col items-center justify-center my-4">
           <h1 className="text-7xl text-center max-sm:text-6xl">
-            Hear From Our <span className="text-pink-500">Gelato</span> Enthusiasts
+            Hear From Our <span className="text-pink-500">Gelato</span>{" "}
+            Enthusiasts
           </h1>
           <p className="font-semibold my-4">
             Read testimonials from those who have enjoyed our artisan gelato.

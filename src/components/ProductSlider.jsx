@@ -16,59 +16,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Button from "./Button";
 import { CartContext } from "../context/CartContext";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import myContext from "../context/myContext";
+import { auth } from "../utils/firebase";
+import toast from "react-hot-toast";
 
-// Sample products array
-// const products = [
-//   {
-//     id: 1,
-//     name: "Chocolate Brownie Sundae",
-//     description: "Rich chocolate ice cream with chunks of brownie.",
-//     price: 5.49,
-//     rating: 4.9,
-//     category: "Sundaes",
-//     image: product2,
-//   },
-//   {
-//     id: 4,
-//     name: "Chocolate Fudge Brownie",
-//     description: "Rich chocolate ice cream with chunks of fudge brownie.",
-//     price: 6.49,
-//     rating: 4.8,
-//     category: "Ice Cream Cakes",
-//     image: product4,
-//   },
-//   {
-//     id: 6,
-//     name: "Salted Caramel Crunch",
-//     description: "Caramel ice cream with a hint of sea salt and crunchy bits.",
-//     price: 6.79,
-//     rating: 4.6,
-//     category: "Ice Cream Pints",
-//     image: product6,
-//   },
-//   {
-//     id: 14,
-//     name: "Cookies and Cream",
-//     description: "Vanilla ice cream with chunks of chocolate cookies.",
-//     price: 5.89,
-//     rating: 4.8,
-//     category: "Ice Cream Pints",
-//     image: product14,
-//   },
-//   {
-//     id: 16,
-//     name: "Pistachio Dream",
-//     description: "Pistachio ice cream with roasted pistachio pieces.",
-//     price: 6.39,
-//     rating: 4.8,
-//     category: "Ice Cream Pints",
-//     image: product16,
-//   },
-// ];
-
-// Custom Arrow Components
 const NextArrow = ({ onClick }) => (
   <button
     className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-pink-500 p-2 rounded-full shadow-lg hover:bg-pink-600 transition"
@@ -129,6 +81,7 @@ const ProductSlider = ({ mainheading, subtext }) => {
   const { getAllProduct, loading } = context;
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   return (
     <div className=" ">
@@ -150,17 +103,20 @@ const ProductSlider = ({ mainheading, subtext }) => {
                 <button
                   className="absolute top-2 right-2 p-2 rounded-full "
                   onClick={() => {
-                    addToWishList(product);
+                    {
+                      auth.currentUser.email !== "admin@gmail.com" ||
+                      !auth.currentUser
+                        ? addToWishList(product)
+                        : toast.error("Admin can not to add washlist");
+                    }
                   }}
                 >
                   {isItemAddedToWishList(product.id) ? (
-                    // <Badge content={1}>
                     <FaHeart
                       size={30}
                       className="absolute top-2 right-2 text-red-600"
                     />
                   ) : (
-                    // </Badge>
                     <FaHeart
                       size={30}
                       className="absolute top-2 right-2   text-white"
@@ -214,7 +170,12 @@ const ProductSlider = ({ mainheading, subtext }) => {
                   <button
                     className="w-1/2 py-3 bg-pink-500 text-white rounded-lg mb-4"
                     onClick={() => {
-                      addToCart(product);
+                      {
+                        auth.currentUser.email !== "admin@gmail.com" ||
+                        !auth.currentUser
+                          ? addToCart(product)
+                          : toast.error("Admin can not add to cart");
+                      }
                     }}
                   >
                     {isItemAdded(product.id)

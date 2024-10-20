@@ -1,5 +1,4 @@
-import heading from "../images/Our Statistics.png";
-
+import React, { useState } from "react";
 const Statistics = () => {
   const stats = [
     { number: "91", label: "Awards Win", sign: "+" },

@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import React from "react";
 import { useEffect, useState } from "react";
 import MyContext from "./myContext";
 import {
@@ -13,10 +14,8 @@ import { fireDB } from "../utils/firebase";
 import toast from "react-hot-toast";
 
 function MyState({ children }) {
-  // Loading State
   const [loading, setLoading] = useState(false);
 
-  // User State
   const [getAllProduct, setGetAllProduct] = useState([]);
 
   /**========================================================================
@@ -41,7 +40,6 @@ function MyState({ children }) {
     }
   };
 
-  // Order State
   const [getAllOrder, setGetAllOrder] = useState([]);
 
   /**============================order function============================================

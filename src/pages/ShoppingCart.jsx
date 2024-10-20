@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { CartContext } from "../context/CartContext";
 import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Heading 1 → Shopping Cart.png";
 import heading2 from "../images/Background+Shadow(cart).png";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -22,8 +21,7 @@ const ShoppingCart = () => {
 
   const navigate = useNavigate();
 
-  console.log(cartItems.length);
-
+  // localStorage update (optional, might already be handled by CartContext)
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
@@ -51,9 +49,9 @@ const ShoppingCart = () => {
             </div>
             <hr className="mb-4" />
 
-            {cartItems.map((item, index) => (
+            {cartItems.map((item) => (
               <div
-                key={index}
+                key={item.id} // Use item.id instead of index as key
                 className="cart-item flex flex-col md:flex-row gap-4 mb-6"
               >
                 <div className="flex gap-5 items-center w-full md:w-3/5">
@@ -77,6 +75,9 @@ const ShoppingCart = () => {
                       className="font-semibold border rounded-l-large px-2 h-8 w-8"
                       onClick={() => lessQuantityToCart(item.id)}
                       disabled={item.quantity === 1}
+                      title={
+                        item.quantity === 1 ? "Cannot decrease further" : ""
+                      }
                     >
                       -
                     </button>
@@ -150,9 +151,16 @@ const ShoppingCart = () => {
           </div>
         </div>
       ) : (
-        <div>
-          {navigate("/shop")}
-          {toast.success("Cart Empty")}
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold my-4">Your Cart is empty</h2>
+          <p className="text-gray-500 my-4">
+            Browse our shop and add items to the cart!
+          </p>
+          <Link to={"/shop"}>
+            <span className="text-pink-600 font-bold my-10 mb-10">
+              Go to Shop →
+            </span>
+          </Link>
         </div>
       )}
     </>

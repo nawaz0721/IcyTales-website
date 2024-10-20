@@ -1,47 +1,38 @@
-/* eslint-disable react/no-unescaped-entities */
+import React from "react";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import myContext from "../../context/myContext";
 import toast from "react-hot-toast";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, fireDB } from "../utils/firebase";
-// import Loader from "../../components/loader/Loader";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-// import { auth } from "../utils/firebase";
+import { GoogleAuthProvider } from "firebase/auth";
 
 const Login = () => {
-  // const context = useContext(myContext);
-  // const { loading, setLoading } = context;
-
-  // navigate
   const navigate = useNavigate();
 
-  // User Signup State
+  const [loading, setLoading] = useState(false);
+  const [loadingWithGoogle, setLoadingWithGoogle] = useState(false);
+
   const [userLogin, setUserLogin] = useState({
     email: "",
     password: "",
   });
 
-  /**========================================================================
-   *                          User Login Function
-   *========================================================================**/
+  // User Login Function
 
   const userLoginFunction = async () => {
-    // validation
     if (userLogin.email === "" || userLogin.password === "") {
       toast.error("All Fields are required");
     }
 
-    // setLoading(true);
     try {
+      setLoading(true);
       const users = await signInWithEmailAndPassword(
         auth,
         userLogin.email,
         userLogin.password
       );
-      // navigate("/");
       toast.success("Login Successfully");
-      // console.log(users.user)
 
       try {
         const q = query(
@@ -56,37 +47,60 @@ const Login = () => {
             email: "",
             password: "",
           });
-          // setLoading(false);
           if (user.role === "user") {
-            navigate("/user-dashboard");
+            navigate("/shop");
           } else {
             navigate("/admin-dashboard");
           }
+          console.log(user);
         });
         return () => data;
       } catch (error) {
         console.log(error);
-        // setLoading(false);
       }
     } catch (error) {
       console.log(error);
-      // setLoading(false);
       toast.error("Login Failed");
+    } finally {
+      setLoading(false);
     }
   };
+
+  // User Login Function With Google
+  const handleSignInWithGoogle = async () => {
+    setLoadingWithGoogle(true);
+    const provider = new GoogleAuthProvider();
+
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        
+        // Handle the signed-in user info if necessary
+        console.log("User signed in: ", user);
+        
+        // Optional: Add user to Firestore if necessary
+
+        navigate("/"); // Redirect after successful sign-in
+    } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error("Google Sign-In Error: ", errorCode, errorMessage);
+        toast.error(`Sign-In failed: ${errorMessage}`); // Provide feedback to the user
+    } finally {
+        setLoadingWithGoogle(false);
+    }
+};
+
   return (
     <div className="flex justify-center items-center h-screen">
-      {/* {loading && <Loader />} */}
       {/* Login Form  */}
       <div className="login_Form bg-pink-50 px-8 py-6 border border-pink-100 rounded-xl shadow-md">
-        {/* Top Heading  */}
         <div className="mb-5">
           <h2 className="text-center text-2xl font-bold text-pink-500 ">
             Login
           </h2>
         </div>
 
-        {/* Input One  */}
         <div className="mb-3">
           <input
             type="email"
@@ -103,7 +117,6 @@ const Login = () => {
           />
         </div>
 
-        {/* Input Two  */}
         <div className="mb-5">
           <input
             type="password"
@@ -119,14 +132,25 @@ const Login = () => {
           />
         </div>
 
-        {/* Signup Button  */}
         <div className="mb-5">
           <button
             type="button"
             onClick={userLoginFunction}
+            disabled={loading}
             className="bg-pink-500 hover:bg-pink-600 w-full text-white text-center py-2 font-bold rounded-md "
           >
-            Login
+            {loading ? "Logining..." : "Login"}
+          </button>
+          <h2 className="text-center text-2xl my-2 mb-2">OR</h2>
+          <button
+            type="button"
+            onClick={handleSignInWithGoogle}
+            disabled={loadingWithGoogle}
+            className="bg-pink-500 hover:bg-pink-600 w-full text-white text-center py-2 font-bold rounded-md "
+          >
+            {loadingWithGoogle
+              ? "Logining with Google...."
+              : "Login with Google"}
           </button>
         </div>
 

@@ -1,3 +1,4 @@
+import React from "react";
 import images1 from "../images/perfect-image1.jpg.png";
 import images2 from "../images/perfect-image2.jpg.png";
 import images3 from "../images/perfect-image3.jpg.png";

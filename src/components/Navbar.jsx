@@ -1,4 +1,4 @@
-import { CiSearch } from "react-icons/ci";
+import React from "react";
 import { BsBag } from "react-icons/bs";
 import { FiMenu } from "react-icons/fi"; // Icon for hamburger menu
 import logo from "../images/Link.png";
@@ -9,7 +9,7 @@ import { CartContext } from "../context/CartContext";
 import { Avatar, Badge } from "@nextui-org/react";
 import { FaHeart, FaUser } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import toast from "react-hot-toast";
 
@@ -44,6 +44,17 @@ const Navbar = () => {
       console.error("Error logging out:", error);
     }
   };
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      console.log("User is signed In");
+      // ...
+    } else {
+      // User is signed out
+      console.log("User is signed out");
+      // ...
+    }
+  });
 
   return (
     <header className="header my-2">
@@ -103,7 +114,7 @@ const Navbar = () => {
 
         <div className="icons">
           <div className="cart-icon-wrapper">
-            {wishListItems.length == 1 ? (
+            {wishListItems.length >= 1 ? (
               <Link to={"/wishList"}>
                 <Badge content={wishListItems.length}>
                   <FaHeart className=" text-red-600" size={25} />
@@ -117,48 +128,73 @@ const Navbar = () => {
           </div>
 
           <div className="cart-icon-wrapper">
-            {!cartItems.length == 0 ? (
+            {cartItems.length >= 1 ? (
               <Link to={"/cart"}>
                 <Badge content={cartItems.length}>
                   <BsBag className="cart-icon" />
                 </Badge>
               </Link>
             ) : (
-              <BsBag className="cart-icon" />
+              <Link to={"/cart"}>
+                <BsBag className="cart-icon" />
+              </Link>
             )}
           </div>
         </div>
 
         {user?.isLogin ? (
-          <div className="nav-item dropdown" onClick={toggleUserDropdown}>
+          <div
+            className="nav-item dropdown"
+            onMouseEnter={toggleUserDropdown}
+            onMouseLeave={toggleUserDropdown}
+          >
             <Avatar src={user?.userInfo?.photoURL} size="md" />
             {isUserDropdownOpen && (
               <div className="dropdown-menu">
-                <Link to={"/user-dashboard"}>
-                  <div className="dropdown-item">User Dashboard</div>
-                </Link>
-                <Link to={"/admin-dashboard"}>
-                  <div className="dropdown-item">Admin Dashboard</div>
-                </Link>
-                <Link>
-                  <div onClick={handleLogoutUser} className="dropdown-item">
-                    Log Out
-                  </div>
-                </Link>
+                {auth.currentUser.email !== "admin@gmail.com" ? (
+                  <>
+                    <Link to={"/user-dashboard"}>
+                      <div className="dropdown-item">User Dashboard</div>
+                    </Link>
+                    <Link>
+                      <div onClick={handleLogoutUser} className="dropdown-item">
+                        Log Out
+                      </div>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to={"/user-dashboard"}>
+                      <div className="dropdown-item">User Dashboard</div>
+                    </Link>
+                    <Link to={"/admin-dashboard"}>
+                      <div className="dropdown-item">Admin Dashboard</div>
+                    </Link>
+                    <Link>
+                      <div onClick={handleLogoutUser} className="dropdown-item">
+                        Log Out
+                      </div>
+                    </Link>
+                  </>
+                )}
               </div>
             )}
           </div>
         ) : (
-          <div className="nav-item dropdown" onClick={toggleUserDropdown}>
+          <div
+            className="nav-item dropdown"
+            onMouseEnter={toggleUserDropdown}
+            onMouseLeave={toggleUserDropdown}
+          >
             <Avatar showFallback src="https://images.unsplash.com/broken" />
             {isUserDropdownOpen && (
               <div className="dropdown-menu">
                 <Link to={"/login"}>
                   <div className="dropdown-item">Log In</div>
                 </Link>
-                <Link to={"/admin-dashboard"}>
+                {/* <Link to={"/admin-dashboard"}>
                   <div className="dropdown-item">Admin Dashboard</div>
-                </Link>
+                </Link> */}
               </div>
             )}
           </div>

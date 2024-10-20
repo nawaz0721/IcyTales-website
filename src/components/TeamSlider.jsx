@@ -1,11 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import image1 from "../images/Figure → team-image1.jpg.png";
 import image2 from "../images/Figure → team-image2.jpg.png";
 import image3 from "../images/Figure → team-image3.jpg.png";
 import image4 from "../images/team-image4.jpg.png";
 import image5 from "../images/team-image5.jpg.png";
 import image6 from "../images/team-image6.jpg.png";
-import heading from "../images/Our Team Members.png";
 import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const TeamSlider = () => {

@@ -1,10 +1,10 @@
+import React from "react";
 import { useNavigate, useParams } from "react-router";
 import myContext from "../../context/myContext";
 import { useContext, useEffect, useState } from "react";
 import { Timestamp, doc, getDoc, setDoc } from "firebase/firestore";
 import { fireDB } from "../../utils/firebase";
 import toast from "react-hot-toast";
-// import Loader from "../../components/loader/Loader";
 
 const categoryList = [
   {

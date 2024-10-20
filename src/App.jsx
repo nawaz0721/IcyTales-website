@@ -1,9 +1,7 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import React from "react";
 import "./App.css";
 import Home from "./pages/Home";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import AboutUs from "./pages/About";
 import Team from "./pages/Team";
 import Navbar from "./components/Navbar";
@@ -37,66 +35,89 @@ function App() {
   return (
     <MyState>
       <BrowserRouter>
-        <Navbar />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/aboutus" element={<AboutUs />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/review" element={<Review />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/blogs/:id" element={<BlogsDetails />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/shop/:id" element={<ProductDetail />} />
-          <Route path="/cart" element={<ShoppingCart />} />
-          <Route path="/checkout" element={<CheckOut />} />
-          <Route path="/thankyou" element={<Thankyou />} />
-          <Route path="/wishlist" element={<WishList />} />
-          <Route path="/policy" element={<Policy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route
-            path="/user-dashboard"
-            element={
-              <ProtectedRouteForUser>
-                <UserDashboard />
-              </ProtectedRouteForUser>
-            }
-          />
-          <Route
-            path="/admin-dashboard"
-            element={
-              <ProtectedRouteForAdmin>
-                <AdminDashboard />
-              </ProtectedRouteForAdmin>
-            }
-          />
-          <Route
-            path="/addproduct"
-            element={
-              <ProtectedRouteForAdmin>
-                <AddProducts />
-              </ProtectedRouteForAdmin>
-            }
-          />
-          <Route
-            path="/updateproduct/:id"
-            element={
-              <ProtectedRouteForAdmin>
-                <UpdateProduct />
-              </ProtectedRouteForAdmin>
-            }
-          />
-        </Routes>
-        <Footer />
-        <Toaster />
+        <MainApp />
       </BrowserRouter>
     </MyState>
   );
 }
+
+// New MainApp component to handle routes and conditional rendering
+const MainApp = () => {
+  const location = useLocation();
+
+  // Define the routes where you want to hide the navbar and/or footer
+  const hideNavbarRoutes = ["/login", "/signup"];
+  const hideFooterRoutes = [
+    "/login",
+    "/signup",
+    "/user-dashboard",
+    "/admin-dashboard",
+  ];
+
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
+  const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
+
+  return (
+    <>
+      {!shouldHideNavbar && <Navbar />}
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/review" element={<Review />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blogs/:id" element={<BlogsDetails />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/shop/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<ShoppingCart />} />
+        <Route path="/checkout" element={<CheckOut />} />
+        <Route path="/thankyou" element={<Thankyou />} />
+        <Route path="/wishlist" element={<WishList />} />
+        <Route path="/policy" element={<Policy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="*" element={<NotFound />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/user-dashboard"
+          element={
+            <ProtectedRouteForUser>
+              <UserDashboard />
+            </ProtectedRouteForUser>
+          }
+        />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRouteForAdmin>
+              <AdminDashboard />
+            </ProtectedRouteForAdmin>
+          }
+        />
+        <Route
+          path="/addproduct"
+          element={
+            <ProtectedRouteForAdmin>
+              <AddProducts />
+            </ProtectedRouteForAdmin>
+          }
+        />
+        <Route
+          path="/updateproduct/:id"
+          element={
+            <ProtectedRouteForAdmin>
+              <UpdateProduct />
+            </ProtectedRouteForAdmin>
+          }
+        />
+      </Routes>
+      {!shouldHideFooter && <Footer />}
+      <Toaster />
+    </>
+  );
+};
 
 export default App;

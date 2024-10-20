@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Heading 1 → Wish List.png";
 import heading2 from "../images/Background+Shadow(wishlist).png";
 import { CartContext } from "../context/CartContext";
 import { CiCircleRemove } from "react-icons/ci";

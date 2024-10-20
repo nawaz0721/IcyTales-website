@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import TopSlider from "../components/TopSlider";
-import heading1 from "../images/Heading 1 → Contact Us.png";
 import heading2 from "../images/Background+Shadow(contact).png";
-import heading3 from "../images/Get in Touch With Us.png";
 import { CiLocationOn } from "react-icons/ci";
 import { HiOutlineMailOpen } from "react-icons/hi";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -26,7 +24,6 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form data:", formData);
-    // Add form submission logic here
   };
   return (
     <div>
