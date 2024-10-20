@@ -1,4 +1,3 @@
-// vite.config.js
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -7,11 +6,24 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            return "vendor"; // Split vendor code into its own chunk
+            if (id.includes("react") || id.includes("react-dom")) {
+              return "react-vendor";
+            }
+            if (id.includes("lodash")) {
+              return "lodash";
+            }
+            return "vendor";
           }
-          // You can add more conditions here based on your project structure
+
+          if (id.includes("src/pages")) {
+            return "pages";
+          }
+          if (id.includes("src/components")) {
+            return "components";
+          }
         },
       },
     },
+    chunkSizeWarningLimit: 1000,
   },
 });

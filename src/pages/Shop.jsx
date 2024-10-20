@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import myContext from "../context/myContext";
 import { CartContext } from "../context/CartContext";
 import TopSlider from "../components/TopSlider";
 import heading2 from "../images/Background+Shadow(shop).png";
@@ -10,6 +9,7 @@ import { Badge } from "@nextui-org/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import toast from "react-hot-toast";
+import myContext from "../context/myContext";
 
 const categories = [
   { name: "All" },
