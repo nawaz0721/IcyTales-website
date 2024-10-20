@@ -14,7 +14,6 @@ export default defineConfig({
             }
             return "vendor";
           }
-
           if (id.includes("src/pages")) {
             return "pages";
           }
@@ -25,5 +24,12 @@ export default defineConfig({
       },
     },
     chunkSizeWarningLimit: 1000,
+  },
+  // Add resolve options for module resolution
+  resolve: {
+    alias: {
+      '@context': '/src/context', // Optional: Set up a path alias for easier imports
+    },
+    extensions: ['.js', '.jsx', '.ts', '.tsx'], // Ensure Vite resolves .jsx files automatically
   },
 });
