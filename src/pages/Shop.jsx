@@ -43,7 +43,7 @@ const IceCreamShop = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [priceRange, setPriceRange] = useState([5, 50]);
+  const [priceRange, setPriceRange] = useState([5, 20]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -111,11 +111,11 @@ const IceCreamShop = () => {
 
   return (
     <>
-      <TopSlider image1={"Shop"} image2={heading2} />
+      <TopSlider image1={"Shop"} pagename={"Shop"} link1={"/shop"} />
       <div className="container mx-auto p-6">
         <div className="flex flex-col md:flex-row gap-6">
-          <div className="w-full md:w-1/4">
-            <div className="mb-8">
+          <div className="w-full md:w-1/4 ">
+            <div className="mb-8 ">
               <input
                 type="text"
                 placeholder="Search"
@@ -153,7 +153,7 @@ const IceCreamShop = () => {
               <input
                 type="range"
                 min="5"
-                max="50"
+                max="20"
                 value={priceRange[0]}
                 onChange={handlePriceChange}
                 className="mx-4"
@@ -178,17 +178,28 @@ const IceCreamShop = () => {
                           className="rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
                         >
                           <div className="h-auto">
-                            <div className="relative border-solid border-2 border-pink-500 h-[220px] rounded-lg">
+                            <div className="relative flex justify-center bg-pink-200 border-solid border-2 border-pink-500 h-[220px] rounded-lg">
                               <button
-                                className="absolute top-2 right-2 p-2 rounded-full"
+                                className="absolute top-2 right-2 p-2 rounded-full "
                                 onClick={() => {
                                   {
-                                    auth.currentUser.email !==
-                                      "admin@gmail.com" || !auth.currentUser
-                                      ? addToWishList(data)
-                                      : toast.error(
+                                    if (auth.currentUser) {
+                                      if (
+                                        auth.currentUser.email !==
+                                        "admin@gmail.com"
+                                      ) {
+                                        addToWishList(data);
+                                      } else {
+                                        toast.error(
                                           "Admin can not to add washlist"
                                         );
+                                      }
+                                    } else {
+                                      toast.error(
+                                        "Please login to add to wishlist"
+                                      );
+                                      navigate("/login");
+                                    }
                                   }
                                 }}
                               >
@@ -200,7 +211,7 @@ const IceCreamShop = () => {
                                 ) : (
                                   <FaHeart
                                     size={30}
-                                    className="absolute top-2 right-2 text-gray-300"
+                                    className="absolute top-2 right-2 text-slate-500"
                                   />
                                 )}
                               </button>
@@ -208,7 +219,7 @@ const IceCreamShop = () => {
                                 <img
                                   src={productImageUrl}
                                   alt={title}
-                                  className="h-[200px] object-cover"
+                                  className="h-[200px] object-cover "
                                 />
                               </Link>
                             </div>
@@ -228,9 +239,23 @@ const IceCreamShop = () => {
                                 <button
                                   className="bg-purple-500 text-white p-2 rounded-3xl flex justify-center hover:bg-purple-600"
                                   onClick={() => {
-                                    auth.currentUser.email !== "admin@gmail.com"
-                                      ? addToCart(data)
-                                      : toast.error("Admin cannot add to cart");
+                                    if (auth.currentUser) {
+                                      if (
+                                        auth.currentUser.email !==
+                                        "admin@gmail.com"
+                                      ) {
+                                        addToCart(data);
+                                      } else {
+                                        toast.error(
+                                          "Admin can not to add cart"
+                                        );
+                                      }
+                                    } else {
+                                      toast.error(
+                                        "Please login to add to cart"
+                                      );
+                                      navigate("/login");
+                                    }
                                   }}
                                 >
                                   {isItemAdded(data.id) ? (

@@ -10,7 +10,11 @@ const WishList = () => {
 
   return (
     <div>
-      <TopSlider image1={"Wish List"} image2={heading2} />
+      <TopSlider
+        image1={"Wish List"}
+        pagename={"Wish List"}
+        link1={"/wishlist"}
+      />
       <div className="container mx-auto px-4 py-8">
         {wishListItems.length === 0 ? (
           <div className="text-center">

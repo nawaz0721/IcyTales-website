@@ -1,12 +1,17 @@
-export default {
+// vite.config.js
+import { defineConfig } from "vite";
+
+export default defineConfig({
   build: {
-    chunkSizeWarningLimit: 1000, // Adjusts the warning threshold for chunk sizes
+    chunkSizeWarningLimit: 1000, // Adjust limit as necessary
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "lodash"], // Separates these libraries into their own chunk
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return "vendor"; // Split vendor code into its own chunk
+          }
         },
       },
     },
   },
-};
+});

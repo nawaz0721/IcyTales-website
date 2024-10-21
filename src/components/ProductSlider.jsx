@@ -104,10 +104,16 @@ const ProductSlider = ({ mainheading, subtext }) => {
                   className="absolute top-2 right-2 p-2 rounded-full "
                   onClick={() => {
                     {
-                      auth.currentUser.email !== "admin@gmail.com" ||
-                      !auth.currentUser
-                        ? addToWishList(product)
-                        : toast.error("Admin can not to add washlist");
+                      if (auth.currentUser) {
+                        if (auth.currentUser.email !== "admin@gmail.com") {
+                          addToWishList(product);
+                        } else {
+                          toast.error("Admin can not to add washlist");
+                        }
+                      } else {
+                        toast.error("Please login to add to wishlist");
+                        navigate("/login");
+                      }
                     }
                   }}
                 >
@@ -171,10 +177,16 @@ const ProductSlider = ({ mainheading, subtext }) => {
                     className="w-1/2 py-3 bg-pink-500 text-white rounded-lg mb-4"
                     onClick={() => {
                       {
-                        auth.currentUser.email !== "admin@gmail.com" ||
-                        !auth.currentUser
-                          ? addToCart(product)
-                          : toast.error("Admin can not add to cart");
+                        if (auth.currentUser) {
+                          if (auth.currentUser.email !== "admin@gmail.com") {
+                            addToCart(product);
+                          } else {
+                            toast.error("Admin can not to add cart");
+                          }
+                        } else {
+                          toast.error("Please login to add to cart");
+                          navigate("/login");
+                        }
                       }
                     }}
                   >

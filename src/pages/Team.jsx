@@ -74,7 +74,7 @@ const Team = () => {
   ];
   return (
     <div className="Team">
-      <TopSlider image1={"Team"} image2={heading2} />
+      <TopSlider image1={"Team"} pagename={"Team"} link1={"/team"}  />
       <div className="w-[85%] m-auto p-10">
         <div className="w-full m-auto">
           <h1 className="text-7xl text-center max-sm:text-6xl">

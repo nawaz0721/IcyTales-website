@@ -125,7 +125,13 @@ const BlogsDetails = () => {
 
   return (
     <div>
-      <TopSlider image1={"Blog Detail"} image2={heading2} />
+      <TopSlider
+        image1={"Blog Detail"}
+        pagename={"Blogs  / "}
+        link1={"/blogs"}
+        pagename2={"Blogs Detail"}
+        link2={`/blogs/${id}`}
+      />
       <BlogDetailCompo blog={blog} />
     </div>
   );

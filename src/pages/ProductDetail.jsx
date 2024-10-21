@@ -86,7 +86,13 @@ const ProductDetail = () => {
 
   return (
     <div>
-      <TopSlider image1={"Product Detail"} image2={heading2} />
+      <TopSlider
+        image1={"Product Detail"}
+        pagename={"Shop  / "}
+        link1={"/shop"}
+        pagename2={"Product Detail"}
+        link2={`/shop/${id}`}
+      />
 
       <div className="w-[75%] m-auto bg-[#dddddd86] rounded-large my-4">
         <div className="flex flex-col md:flex-row gap-8">
@@ -123,10 +129,16 @@ const ProductDetail = () => {
                 className="px-4 py-2 bg-gray-300 text-gray-700 rounded"
                 onClick={() => {
                   {
-                    auth.currentUser.email !== "admin@gmail.com" ||
-                    !auth.currentUser
-                      ? increaseQuantity()
-                      : toast.error("Admin can not buy any item");
+                    if (auth.currentUser) {
+                      if (auth.currentUser.email !== "admin@gmail.com") {
+                        increaseQuantity();
+                      } else {
+                        toast.error("Admin can not to add cart");
+                      }
+                    } else {
+                      toast.error("Please login to add to cart");
+                      navigate("/login");
+                    }
                   }
                 }}
               >
@@ -137,11 +149,15 @@ const ProductDetail = () => {
             <button
               className="w-1/2 py-3 bg-pink-500 text-white rounded-lg mb-4"
               onClick={() => {
-                {
-                  auth.currentUser.email !== "admin@gmail.com" ||
-                  !auth.currentUser
-                    ? navigate("/cart")
-                    : toast.error("Admin can not buy any item");
+                if (auth.currentUser) {
+                  if (auth.currentUser.email !== "admin@gmail.com") {
+                    navigate("/cart");
+                  } else {
+                    toast.error("Admin can not to add items");
+                  }
+                } else {
+                  toast.error("Please login to buy");
+                  navigate("/login");
                 }
               }}
             >
@@ -153,10 +169,16 @@ const ProductDetail = () => {
                 className=""
                 onClick={() => {
                   {
-                    auth.currentUser.email !== "admin@gmail.com" ||
-                    !auth.currentUser
-                      ? addToWishList(icecreamproduct)
-                      : toast.error("Admin can not to add washlist");
+                    if (auth.currentUser) {
+                      if (auth.currentUser.email !== "admin@gmail.com") {
+                        addToWishList(icecreamproduct);
+                      } else {
+                        toast.error("Admin can not to add washlist");
+                      }
+                    } else {
+                      toast.error("Please login to add to wishlist");
+                      navigate("/login");
+                    }
                   }
                 }}
               >

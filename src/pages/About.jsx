@@ -12,7 +12,7 @@ import TeamSlider from "../components/TeamSlider";
 const AboutUs = () => {
   return (
     <div className="about-us">
-      <TopSlider image1={"About Us"} image2={button} />
+      <TopSlider image1={"About Us"} pagename={"About Us"} link1={"/aboutus"} />
       <div className="flex flex-wrap justify-center items-center w-full h-auto min-h-[600px]">
         <div className="w-full md:w-1/2">
           <img className="w-3/4 mx-auto" src={image1} alt="Ice cream image 1" />

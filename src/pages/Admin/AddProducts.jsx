@@ -21,7 +21,7 @@ const categoryList = [
 
 const AddProduct = () => {
   const navigate = useNavigate();
-  
+
   const [product, setProduct] = useState({
     title: "",
     price: "",
@@ -115,13 +115,15 @@ const AddProduct = () => {
         <div className="mb-3">
           <select
             value={product.category}
-            onChange={(e) => setProduct({ ...product, category: e.target.value })}
+            onChange={(e) =>
+              setProduct({ ...product, category: e.target.value })
+            }
             className="w-full px-1 py-2 text-black bg-pink-50 border border-pink-200 rounded-md outline-none"
           >
-            <option disabled>Select Product Category</option>
+            <option>Select Product Category</option>
             {categoryList.map((value, index) => (
               <option key={index} value={value.name}>
-                {value.name}
+                <select>{value.name}</select>
               </option>
             ))}
           </select>
@@ -129,7 +131,9 @@ const AddProduct = () => {
         <div className="mb-3">
           <textarea
             value={product.description}
-            onChange={(e) => setProduct({ ...product, description: e.target.value })}
+            onChange={(e) =>
+              setProduct({ ...product, description: e.target.value })
+            }
             name="description"
             placeholder="Product Description"
             rows="5"

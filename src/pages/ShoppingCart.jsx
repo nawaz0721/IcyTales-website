@@ -28,7 +28,7 @@ const ShoppingCart = () => {
 
   return (
     <>
-      <TopSlider image1={"Cart"} image2={heading2} />
+      <TopSlider image1={"Cart"} pagename={"Cart"} link1={"/cart"} />
 
       {cartItems.length >= 1 ? (
         <div className="shopping-cart flex flex-col lg:flex-row justify-between gap-10 p-6 w-[90%] mx-auto">

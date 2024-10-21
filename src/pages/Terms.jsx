@@ -5,7 +5,7 @@ import heading2 from "../images/Background+Shadow(terms).png";
 const Terms = () => {
   return (
     <div>
-      <TopSlider image1={"Terms & Condition"} image2={heading2} />
+      <TopSlider image1={"Terms & Condition"} pagename={"Terms & Condition"} link1={"/terms"} />
       <div
         style={{
           padding: "20px",

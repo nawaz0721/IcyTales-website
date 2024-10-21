@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Thankyou = () => {
   return (
-    <div className="bg-[#f5f5f5] flex flex-col justify-center h-full items-center gap-y-6 p-4 text-center">
+    <div className="bg-[#f5f5f5] flex flex-col justify-center h-screen items-center gap-y-6 p-4 text-center">
       <img src={heading1} alt="Thank you image" />
 
       <h1 className="text-black text-9xl max-sm:text-8xl">Thank You!</h1>

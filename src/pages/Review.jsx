@@ -6,7 +6,7 @@ import TestimonialCard from "../components/TestimonialCard ";
 const Review = () => {
   return (
     <div>
-      <TopSlider image1={"Review"} image2={heading2} />
+      <TopSlider image1={"Review"} pagename={"Review"} link1={"/review"} />
       <div>
         <div className="flex flex-col items-center justify-center my-4">
           <h1 className="text-7xl text-center max-sm:text-6xl">

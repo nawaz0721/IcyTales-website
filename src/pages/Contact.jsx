@@ -27,7 +27,7 @@ const Contact = () => {
   };
   return (
     <div>
-      <TopSlider image1={"Contact Us"} image2={heading2} />
+      <TopSlider image1={"Contact Us"} pagename={"Contact Us"} link1={"/contact"}/>
       <div>
         <div className="w-full lg:w-[70%] mx-auto text-center p-4 sm:p-8">
           <h1 className="text-7xl text-center max-sm:text-6xl">

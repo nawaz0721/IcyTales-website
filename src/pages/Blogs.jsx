@@ -90,7 +90,7 @@ const Blogs = () => {
 
   return (
     <div>
-      <TopSlider image1={"Blogs"} image2={heading2} />
+      <TopSlider image1={"Blogs"} pagename={"Blogs"} link1={"/blogs"} />
       <div className="flex flex-wrap max-md:flex-wrap gap-10 my-5 rounded-lg p-5 justify-center items-center w-[80%] m-auto min-h-screen bg-gray-100">
         {blogPosts.map((post) => {
           return (

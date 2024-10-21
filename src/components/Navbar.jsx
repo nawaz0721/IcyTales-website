@@ -55,9 +55,18 @@ const Navbar = () => {
       // ...
     }
   });
+  window.addEventListener("scroll", function () {
+    const header = document.querySelector(".header");
+    if (window.scrollY > 50) {
+      // Adjust the scroll value as needed
+      header.classList.add("scrolled");
+    } else {
+      header.classList.remove("scrolled");
+    }
+  });
 
   return (
-    <header className="header my-2">
+    <header className="header my-2 ">
       <div className="logo">
         <Link to={"/"}>
           <img src={logo} alt="IcyTales Logo" />

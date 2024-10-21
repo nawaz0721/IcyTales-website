@@ -5,7 +5,11 @@ import heading2 from "../images/Background+Shadow(policy).png";
 const Policy = () => {
   return (
     <div>
-      <TopSlider image1={"Privacy Policy"} image2={heading2} />
+      <TopSlider
+        image1={"Privacy Policy"}
+        pagename={"Privacy Policy"}
+        link1={"/policy"}
+      />
       <div
         style={{
           padding: "20px",

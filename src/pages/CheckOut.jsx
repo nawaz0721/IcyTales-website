@@ -70,7 +70,6 @@ const CheckoutForm = () => {
       billingInfo,
       email: user.email,
       userid: user.uid,
-      status: "confirmed",
       time: Timestamp.now(),
       date: new Date().toLocaleString("en-US", {
         month: "short",
