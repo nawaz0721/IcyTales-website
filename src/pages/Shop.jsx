@@ -9,7 +9,7 @@ import { Badge } from "@nextui-org/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import toast from "react-hot-toast";
-import myContext from "../context/myContext";
+import myContext from "../context/myContext.jsx";
 
 const categories = [
   { name: "All" },

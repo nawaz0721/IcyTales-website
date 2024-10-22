@@ -47,7 +47,14 @@ const MainApp = () => {
 
   // Define the routes where you want to hide the navbar and/or footer
   const hideNavbarRoutes = ["/login", "/signup", "/thankyou", "*"];
-  const hideFooterRoutes = ["/login", "/signup", "/user-dashboard", "/admin-dashboard", "/thankyou", "*"];
+  const hideFooterRoutes = [
+    "/login",
+    "/signup",
+    "/user-dashboard",
+    "/admin-dashboard",
+    "/thankyou",
+    "*",
+  ];
 
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
   const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
@@ -116,4 +123,3 @@ const MainApp = () => {
 };
 
 export default App;
-
