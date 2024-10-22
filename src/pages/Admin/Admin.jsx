@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import ProductDetail from "../../components/admin/ProductDetails"; // Check spelling
+import ProductDetail from "../../components/admin/ProductDetails";
 import OrderDetail from "../../components/admin/OrderDetail";
 import UserDetail from "../../components/admin/UserDetail";
 import { MyContext } from "../../context/MyState"; // Ensure this matches your export
@@ -8,14 +8,42 @@ import { MyContext } from "../../context/MyState"; // Ensure this matches your e
 const AdminDashboard = () => {
   const user = JSON.parse(localStorage.getItem("users"));
   const context = useContext(MyContext);
-  const {
-    getAllProduct = [],
-    getAllOrder = [],
-    getAllUser = [],
-    loading,
-  } = context || {}; // Default to empty array
 
+  const {
+    getAllProduct,
+    getAllOrder,
+    getAllUsers,
+    loading,
+    getAllProductFunction,
+    getAllOrderFunction,
+    getAllUserFunction,
+  } = context || {};
+
+  // Fetching data when component mounts
+  useEffect(() => {
+    if (getAllUserFunction) getAllUserFunction();
+  }, []);
+
+  useEffect(() => {
+    if (getAllOrderFunction) getAllOrderFunction();
+  }, []);
+
+  useEffect(() => {
+    if (getAllProductFunction) getAllProductFunction();
+  }, []);
+
+  // Fallback to empty arrays if data is not available yet
+  const users = getAllUsers || [];
+  const products = getAllProduct || [];
+  const orders = getAllOrder || [];
+
+  // If data is loading, display a loading message or spinner
   if (loading) return <div>Loading...</div>;
+
+  console.log("getAllUsers", getAllUsers);
+  console.log("getAllProduct", getAllProduct);
+  console.log("getAllOrder", getAllOrder);
+
   return (
     <div>
       {/* Top */}
@@ -38,7 +66,7 @@ const AdminDashboard = () => {
                 alt="Admin Profile"
               />
             </div>
-            <div className="">
+            <div>
               <h2 className="text-center text-lg text-pink-500">
                 <span className="font-bold text-black">Name: </span>
                 {user?.name}
@@ -67,7 +95,7 @@ const AdminDashboard = () => {
               <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer">
                 <div className="border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
                   <h2 className="title-font font-medium text-3xl text-pink-400 fonts1">
-                    {getAllProduct.length}
+                    {products.length}
                   </h2>
                   <p className="text-pink-500 font-bold">Total Products</p>
                 </div>
@@ -77,7 +105,7 @@ const AdminDashboard = () => {
               <Tab className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer">
                 <div className="border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
                   <h2 className="title-font font-medium text-3xl text-pink-400 fonts1">
-                    {getAllOrder.length}
+                    {orders.length}
                   </h2>
                   <p className="text-pink-500 font-bold">Total Orders</p>
                 </div>
@@ -87,13 +115,14 @@ const AdminDashboard = () => {
               <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer">
                 <div className="border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
                   <h2 className="title-font font-medium text-3xl text-pink-400 fonts1">
-                    {getAllUser.length}
+                    {users.length}
                   </h2>
                   <p className="text-pink-500 font-bold">Total Users</p>
                 </div>
               </Tab>
             </TabList>
 
+            {/* Tab Panels */}
             <TabPanel>
               <ProductDetail />
             </TabPanel>

@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { Timestamp, doc, getDoc, setDoc } from "firebase/firestore";
 import { fireDB } from "../../utils/firebase";
 import toast from "react-hot-toast";
-import MyState from "../../context/MyState";
+import { MyContext } from "../../context/MyState";
 
 const categoryList = [
   {
@@ -40,7 +40,7 @@ const categoryList = [
 ];
 
 const UpdateProduct = () => {
-  const context = useContext(MyState);
+  const context = useContext(MyContext);
   const { loading, setLoading, getAllProductFunction } = context;
 
   // navigate

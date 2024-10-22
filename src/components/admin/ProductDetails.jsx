@@ -1,16 +1,19 @@
-import React from "react";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import MyState from "../../context/MyState";
+import { MyContext } from "../../context/MyState";
 import { fireDB } from "../../utils/firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import toast from "react-hot-toast";
 
 const ProductDetail = () => {
-  const context = useContext(MyState);
-  const { setLoading, getAllProductFunction } = context || {}; // Optional chaining
+  const context = useContext(MyContext);
 
-  const navigate = useNavigate(); 
+  const { getAllProduct, loading, setLoading } = context || {};
+
+  console.log("Product details", getAllProduct);
+
+  const navigate = useNavigate();
+
   const deleteProduct = async (id) => {
     if (!setLoading) return; // Early exit if context is not available
     setLoading(true);
@@ -18,18 +21,17 @@ const ProductDetail = () => {
       await deleteDoc(doc(fireDB, "products", id));
       toast.success("Product Deleted successfully");
       getAllProductFunction();
-      setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+    } finally {
+      setLoading(false); // Ensure loading state is reset in both success and error cases
     }
   };
+
   return (
     <div>
       <div className="py-5 flex justify-between items-center">
-        {/* text  */}
-        <h2 className=" text-xl text-pink-300 font-bold">All Product</h2>
-        {/* Add Product Button  */}
+        <h2 className="text-xl text-pink-300 font-bold">All Product</h2>
         <Link to={"/addproduct"}>
           <button className="px-5 py-2 bg-pink-50 border border-pink-100 rounded-lg">
             Add Product
@@ -37,7 +39,6 @@ const ProductDetail = () => {
         </Link>
       </div>
 
-      {/* table  */}
       <div className="w-full overflow-x-auto mb-5">
         <table className="w-full text-left border border-collapse sm:border-separate border-pink-100 text-pink-400">
           <tbody>
@@ -91,40 +92,51 @@ const ProductDetail = () => {
                 Action
               </th>
             </tr>
-            {getAllProduct.map((item, index) => {
-              const { id, title, price, category, date, productImageUrl } =
-                item;
-              return (
-                <tr key={index} className="text-pink-300">
-                  <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 ">
-                    {index + 1}.
-                  </td>
-                  <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
-                    <div className="flex justify-center">
-                      <img className="w-20 " src={productImageUrl} alt="" />
-                    </div>
-                  </td>
-                  <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
-                    {title}
-                  </td>
-                  <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
-                    ${price}
-                  </td>
-                  <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
-                    {category}
-                  </td>
-                  <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
-                    {date}
-                  </td>
-                  <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 text-green-500 cursor-pointer ">
-                    <Link to={`/updateproduct/${id}`}>Edit</Link>
-                  </td>
-                  <td className="h-12 px-6 text-md transition duration-300 border-t border-l hover:underline first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 hover:text-red-500 cursor-pointer ">
-                    <button onClick={() => deleteProduct(id)}>Delete</button>
-                  </td>
-                </tr>
-              );
-            })}
+            {Array.isArray(getAllProduct) && getAllProduct.length > 0 ? (
+              getAllProduct.map((item, index) => {
+                const { id, title, price, category, date, productImageUrl } =
+                  item;
+                return (
+                  <tr key={index} className="text-pink-300">
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 ">
+                      {index + 1}.
+                    </td>
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
+                      <div className="flex justify-center">
+                        <img className="w-20 " src={productImageUrl} alt="" />
+                      </div>
+                    </td>
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
+                      {title}
+                    </td>
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
+                      ${price}
+                    </td>
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
+                      {category}
+                    </td>
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
+                      {date}
+                    </td>
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 text-green-500 cursor-pointer ">
+                      <Link to={`/updateproduct/${id}`}>Edit</Link>
+                    </td>
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l hover:underline first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 hover:text-red-500 cursor-pointer ">
+                      <button onClick={() => deleteProduct(id)}>Delete</button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td
+                  colSpan="8"
+                  className="h-12 px-6 text-md text-center text-slate-500"
+                >
+                  No products available
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -1,21 +1,29 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
 import myContext, { MyContext } from "../context/MyState";
+import { collection, getDocs } from "firebase/firestore";
+import { fireDB } from "../utils/firebase";
 
 const UserDashboard = () => {
   const user = JSON.parse(localStorage.getItem("users"));
   const context = useContext(MyContext);
   const { getAllOrder, loading } = context || {};
+  const [orderStatus, setOrderStatus] = useState([]);
 
-  const [orderStatuses, setOrderStatuses] = useState({});
-
+  // Fetch products with their statuses from Firebase
   useEffect(() => {
-    const savedStatuses =
-      JSON.parse(localStorage.getItem("orderStatuses")) || {};
-    setOrderStatuses(savedStatuses);
-  }, []);
+    const fetchOrder = async () => {
+      const querySnapshot = await getDocs(collection(fireDB, "order"));
+      const orderList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setOrderStatus(orderList);
+    };
 
-  const shipping = 20;
+    fetchOrder();
+  }, []);
+  console.log(orderStatus);
 
   return (
     <div className="container mx-auto px-4 py-5 lg:py-8">
@@ -74,8 +82,8 @@ const UserDashboard = () => {
                       } = item;
 
                       const currentStatus =
-                        orderStatuses[order.id]?.[item.id] || "Pending";
-
+                        orderStatus.find((o) => o.id === order.id)?.status ||
+                        "Pending";
                       return (
                         <div
                           key={index}
@@ -99,9 +107,7 @@ const UserDashboard = () => {
                                   </div>
                                   <div className="text-sm font-medium text-gray-900">
                                     ${" "}
-                                    {(Number(price) || 0).toFixed(2) *
-                                      quantity +
-                                      shipping}
+                                    {(Number(price) || 0).toFixed(2) * quantity}
                                   </div>
                                 </div>
                                 <div className="mb-4">

@@ -126,7 +126,7 @@ const CheckoutForm = () => {
     <>
       <TopSlider image1={"CheckOut"} image2={heading2} />
       <div className="flex flex-col lg:flex-row p-4 md:p-6 w-[90%] m-auto gap-6 rounded-lg">
-        <div className="bg-[#7272] w-full lg:w-2/3 p-4 md:p-6 shadow-md rounded-large">
+        <div className="bg-[#7272] w-full lg:w-2/3 p-4 md:p-6 h-full shadow-md rounded-large">
           <form onSubmit={sendToWhatsapp}>
             <h2 className="font-bold text-lg mb-4">Billing Address:</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

@@ -12,11 +12,11 @@ import toast from "react-hot-toast";
 
 export const MyContext = createContext();
 
-function MyState({ children }) {
+function  MyState({ children }) {
   const [loading, setLoading] = useState(false);
   const [getAllProduct, setGetAllProduct] = useState([]);
   const [getAllOrder, setGetAllOrder] = useState([]);
-  const [getAllUser, setGetAllUser] = useState([]);
+  const [getAllUsers, setGetAllUsers] = useState([]);
 
   const getAllProductFunction = async () => {
     setLoading(true);
@@ -78,7 +78,7 @@ function MyState({ children }) {
         QuerySnapshot.forEach((doc) => {
           userArray.push({ ...doc.data(), id: doc.id });
         });
-        setGetAllUser(userArray);
+        setGetAllUsers(userArray);
         setLoading(false);
       });
       return () => unsubscribe(); // Clean up on unmount
@@ -103,7 +103,10 @@ function MyState({ children }) {
         getAllProduct,
         getAllOrder,
         deleteProduct,
-        getAllUser,
+        getAllUsers,
+        getAllProductFunction,
+        getAllOrderFunction,
+        getAllUserFunction,
       }}
     >
       {children}

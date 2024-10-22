@@ -1,66 +1,67 @@
-import React from "react";
-import { useContext } from "react";
-import myContext from "../../context/MyState";
+import React, { useContext, useEffect } from "react";
+import { MyContext } from "../../context/MyState"; // Make sure you're importing the right context
 
 const UserDetail = () => {
-  const context = useContext(MyState);
-  const { getAllUsers, setLoading } = context || {};
+  const context = useContext(MyContext);
+
+  const { getAllUsers, loading, setLoading } = context || {};
+
+  console.log("Users details", getAllUsers);
+
+  if (loading) {
+    return <div>Loading...</div>; // Handle loading state
+  }
+
   return (
     <div>
-      <div>
-        <div className="py-5 flex justify-between items-center">
-          {/* text  */}
-          <h2 className=" text-xl text-pink-300 font-bold">All User</h2>
-        </div>
+      <div className="py-5 flex justify-between items-center">
+        <h2 className="text-xl text-pink-300 font-bold">All Users</h2>
+      </div>
 
-        {/* table  */}
-        <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border border-collapse sm:border-separate border-pink-100 text-pink-400">
-            <tbody>
-              <tr>
-                <th
-                  scope="col"
-                  className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
-                >
-                  S.No.
-                </th>
-
-                <th
-                  scope="col"
-                  className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
-                >
-                  Name
-                </th>
-
-                <th
-                  scope="col"
-                  className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
-                >
-                  Email
-                </th>
-
-                <th
-                  scope="col"
-                  className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
-                >
-                  Uid
-                </th>
-
-                <th
-                  scope="col"
-                  className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
-                >
-                  Role
-                </th>
-
-                <th
-                  scope="col"
-                  className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
-                >
-                  Date
-                </th>
-              </tr>
-              {getAllUser.map((value, index) => {
+      {/* table  */}
+      <div className="w-full overflow-x-auto">
+        <table className="w-full text-left border border-collapse sm:border-separate border-pink-100 text-pink-400">
+          <tbody>
+            <tr>
+              <th
+                scope="col"
+                className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
+              >
+                S.No.
+              </th>
+              <th
+                scope="col"
+                className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
+              >
+                Name
+              </th>
+              <th
+                scope="col"
+                className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
+              >
+                Email
+              </th>
+              <th
+                scope="col"
+                className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
+              >
+                Uid
+              </th>
+              <th
+                scope="col"
+                className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
+              >
+                Role
+              </th>
+              <th
+                scope="col"
+                className="h-12 px-6 text-md border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100 font-bold fontPara"
+              >
+                Date
+              </th>
+            </tr>
+            {Array.isArray(getAllUsers) && getAllUsers.length > 0 ? (
+              getAllUsers.map((value, index) => {
                 return (
                   <tr key={index} className="text-pink-300">
                     <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 ">
@@ -75,11 +76,11 @@ const UserDetail = () => {
                       {value.email}
                     </td>
 
-                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500  cursor-pointer ">
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 cursor-pointer ">
                       {value.uid}
                     </td>
 
-                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500  cursor-pointer ">
+                    <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 cursor-pointer ">
                       {value.role}
                     </td>
 
@@ -88,10 +89,16 @@ const UserDetail = () => {
                     </td>
                   </tr>
                 );
-              })}
-            </tbody>
-          </table>
-        </div>
+              })
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center py-4 text-gray-500">
+                  No users available.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

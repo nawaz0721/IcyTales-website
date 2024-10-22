@@ -114,7 +114,7 @@ const ShoppingCart = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="order-summary bg-white shadow-md rounded-large p-6 w-full md:w-2/5 lg:w-2/6">
+          <div className="order-summary bg-white shadow-md rounded-large p-6 h-full w-full md:w-2/5 lg:w-2/6">
             <h3 className="font-bold text-lg text-center mb-4">
               Order Summary
             </h3>
