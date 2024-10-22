@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import NotFound from "./NotFound";
-import myContext from "../context/myContext";
+import MyContext from "../context/MyState";
 import { CartContext } from "../context/CartContext";
 import heading2 from "../images/Background+Shadow(product detail).png";
 import heading from "../images/Related Products.png";
@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
-  const { getAllProduct, loading, setLoading } = useContext(myContext);
+  const { getAllProduct, loading, setLoading } = useContext(MyContext);
   const {
     addToCart,
     isItemAdded,

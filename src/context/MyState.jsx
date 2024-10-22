@@ -1,7 +1,6 @@
+import React, { createContext } from "react";
 /* eslint-disable react/prop-types */
-import React from "react";
 import { useEffect, useState } from "react";
-import MyContext from "./myContext.jsx";
 import {
   collection,
   deleteDoc,
@@ -12,6 +11,8 @@ import {
 } from "firebase/firestore";
 import { fireDB } from "../utils/firebase";
 import toast from "react-hot-toast";
+
+export const MyContext = createContext();
 
 function MyState({ children }) {
   const [loading, setLoading] = useState(false);

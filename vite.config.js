@@ -1,5 +1,5 @@
-// vite.config.js
 import { defineConfig } from "vite";
+import path from "path"; // Needed to resolve file paths
 
 export default defineConfig({
   build: {
@@ -12,6 +12,12 @@ export default defineConfig({
           }
         },
       },
+    },
+  },
+  resolve: {
+    alias: {
+      // Alias '@context' to your context folder
+      '@context': path.resolve(__dirname, 'src/context'),
     },
   },
 });

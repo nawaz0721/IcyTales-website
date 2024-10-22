@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router";
-import myContext from "../../context/myContext";
 import { useContext, useEffect, useState } from "react";
 import { Timestamp, doc, getDoc, setDoc } from "firebase/firestore";
 import { fireDB } from "../../utils/firebase";
 import toast from "react-hot-toast";
+import MyState from "../../context/MyState";
 
 const categoryList = [
   {
@@ -40,7 +40,7 @@ const categoryList = [
 ];
 
 const UpdateProduct = () => {
-  const context = useContext(myContext);
+  const context = useContext(MyState);
   const { loading, setLoading, getAllProductFunction } = context;
 
   // navigate
@@ -107,10 +107,8 @@ const UpdateProduct = () => {
   return (
     <div>
       <div className="flex justify-center items-center h-screen">
-        {/* {loading && <Loader />} */}
         {/* Login Form  */}
         <div className="login_Form bg-pink-50 px-8 py-6 border border-pink-100 rounded-xl shadow-md">
-          {/* Top Heading  */}
           <div className="mb-5">
             <h2 className="text-center text-2xl font-bold text-pink-500 ">
               Update Product

@@ -28,7 +28,7 @@ import UpdateProduct from "./pages/Admin/UpdateProduct.jsx";
 import { Toaster } from "react-hot-toast";
 import ProtectedRouteForAdmin from "./protectedRoutes/ProtectedRouteForAdmin.jsx";
 import ProtectedRouteForUser from "./protectedRoutes/ProtectedRouteForUser.jsx";
-import MyState from "./context/MyState.jsx";
+import MyState from "./context/MyState";
 import ProductDetail from "./pages/ProductDetail.jsx";
 
 function App() {

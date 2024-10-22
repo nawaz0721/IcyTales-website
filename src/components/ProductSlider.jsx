@@ -17,9 +17,9 @@ import "slick-carousel/slick/slick-theme.css";
 import Button from "./Button";
 import { CartContext } from "../context/CartContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import myContext from "../context/myContext";
 import { auth } from "../utils/firebase";
 import toast from "react-hot-toast";
+import { MyContext } from "../context/MyState";
 
 const NextArrow = ({ onClick }) => (
   <button
@@ -77,7 +77,7 @@ const ProductSlider = ({ mainheading, subtext }) => {
   const { addToCart, isItemAdded, addToWishList, isItemAddedToWishList } =
     useContext(CartContext);
 
-  const context = useContext(myContext);
+  const context = useContext(MyContext);
   const { getAllProduct, loading } = context;
 
   const { id } = useParams();

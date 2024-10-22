@@ -4,12 +4,12 @@ import ProductDetail from "../../components/admin/ProductDeatils";
 import OrderDetail from "../../components/admin/OrderDetail";
 import UserDetail from "../../components/admin/UserDetail";
 import { useContext } from "react";
-import myContext from "../../context/myContext";
 import { Avatar } from "@nextui-org/react";
+import MyContext from "../../context/MyState";
 
 const AdminDashboard = () => {
   const user = JSON.parse(localStorage.getItem("users"));
-  const context = useContext(myContext);
+  const context = useContext(MyContext);
   const { getAllProduct, getAllOrder, getAllUser } = context;
 
   return (

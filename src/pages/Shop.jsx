@@ -2,14 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import TopSlider from "../components/TopSlider";
-import heading2 from "../images/Background+Shadow(shop).png";
 import NotFoundProduct from "../components/NotFoundProduct";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import { Badge } from "@nextui-org/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import toast from "react-hot-toast";
-import myContext from "../context/myContext.jsx";
+import MyState from "../context/MyState";
 
 const categories = [
   { name: "All" },
@@ -29,7 +28,7 @@ const ITEMS_PER_PAGE = 6;
 
 const IceCreamShop = () => {
   const navigate = useNavigate();
-  const context = useContext(myContext);
+  const context = useContext(MyState);
   const { getAllProduct, loading } = context;
 
   const {
