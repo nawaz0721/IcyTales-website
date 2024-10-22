@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import { MyContext } from "../context/MyState"; // Updated import
 import TopSlider from "../components/TopSlider";
 import NotFoundProduct from "../components/NotFoundProduct";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import { Badge } from "@nextui-org/react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../utils/firebase";
 import toast from "react-hot-toast";
-import MyState from "../context/MyState";
+import { auth } from "../utils/firebase";
 
 const categories = [
   { name: "All" },
@@ -28,17 +27,9 @@ const ITEMS_PER_PAGE = 6;
 
 const IceCreamShop = () => {
   const navigate = useNavigate();
-  const context = useContext(MyState);
-  const { getAllProduct, loading } = context;
-
-  const {
-    addToCart,
-    isItemAdded,
-    addToWishList,
-    isItemAddedToWishList,
-    cartItems,
-    setCartItems, // Ensure you have a setCartItems function in your CartContext
-  } = useContext(CartContext);
+  const { loading, getAllProduct } = useContext(MyContext); // Updated context destructuring
+  const { addToCart, isItemAdded, isItemAddedToWishList, addToWishList } =
+    useContext(CartContext);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -47,19 +38,6 @@ const IceCreamShop = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
-
-  // Load cart from localStorage on component mount
-  useEffect(() => {
-    const savedCartItems = localStorage.getItem("cart");
-    if (savedCartItems) {
-      setCartItems(JSON.parse(savedCartItems));
-    }
-  }, []);
-
-  // Sync cartItems to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
 
   useEffect(() => {
     if (getAllProduct.length > 0) {
@@ -95,19 +73,6 @@ const IceCreamShop = () => {
     startIndex + ITEMS_PER_PAGE
   );
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const uid = user.uid;
-      console.log("User is signed In");
-      // ...
-    } else {
-      // User is signed out
-      console.log("User is signed out");
-      // ...
-    }
-  });
-  console.log(auth.currentUser?.email);
-
   return (
     <>
       <TopSlider image1={"Shop"} pagename={"Shop"} link1={"/shop"} />
@@ -124,7 +89,6 @@ const IceCreamShop = () => {
               />
             </div>
 
-            {/* Categories Filter */}
             <h2 className="text-2xl font-semibold mb-4">Categories</h2>
             <ul className="space-y-3">
               {categories.map((category) => (
@@ -143,7 +107,6 @@ const IceCreamShop = () => {
               ))}
             </ul>
 
-            {/* Price Filter */}
             <h2 className="text-2xl font-semibold mt-6 mb-4">
               Filter By Price
             </h2>
@@ -173,7 +136,7 @@ const IceCreamShop = () => {
                         data;
                       return (
                         <div
-                          key={id} // Use id as key
+                          key={id}
                           className="rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
                         >
                           <div className="h-auto">
@@ -210,7 +173,7 @@ const IceCreamShop = () => {
                                 ) : (
                                   <FaHeart
                                     size={30}
-                                    className="absolute top-2 right-2 text-slate-500"
+                                    className="absolute top-2 right-2   text-white"
                                   />
                                 )}
                               </button>
@@ -234,7 +197,6 @@ const IceCreamShop = () => {
                                 <span className="text-xl font-bold text-pink-500">
                                   ${price}
                                 </span>
-
                                 <button
                                   className="bg-purple-500 text-white p-2 rounded-3xl flex justify-center hover:bg-purple-600"
                                   onClick={() => {
@@ -245,9 +207,7 @@ const IceCreamShop = () => {
                                       ) {
                                         addToCart(data);
                                       } else {
-                                        toast.error(
-                                          "Admin can not to add cart"
-                                        );
+                                        toast.error("Admin cannot add to cart");
                                       }
                                     } else {
                                       toast.error(
@@ -279,7 +239,6 @@ const IceCreamShop = () => {
                     </div>
                   )}
                 </div>
-                {/* Pagination */}
                 <div className="flex justify-center mt-6 space-x-2">
                   {Array.from({ length: totalPages }, (_, index) => (
                     <button

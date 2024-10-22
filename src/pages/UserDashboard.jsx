@@ -1,11 +1,11 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
-import myContext from "../context/MyState";
+import myContext, { MyContext } from "../context/MyState";
 
 const UserDashboard = () => {
   const user = JSON.parse(localStorage.getItem("users"));
-  const context = useContext(myContext);
-  const { loading, getAllOrder } = context;
+  const context = useContext(MyContext);
+  const { getAllOrder, loading } = context || {};
 
   const [orderStatuses, setOrderStatuses] = useState({});
 

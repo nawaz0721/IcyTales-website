@@ -8,10 +8,11 @@ import toast from "react-hot-toast";
 
 const ProductDetail = () => {
   const context = useContext(MyState);
-  const { loading, setLoading, getAllProduct, getAllProductFunction } = context;
-  const navigate = useNavigate();
+  const { setLoading, getAllProductFunction } = context || {}; // Optional chaining
 
+  const navigate = useNavigate(); 
   const deleteProduct = async (id) => {
+    if (!setLoading) return; // Early exit if context is not available
     setLoading(true);
     try {
       await deleteDoc(doc(fireDB, "products", id));

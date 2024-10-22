@@ -6,10 +6,10 @@ import { fireDB } from "../../utils/firebase";
 import { CartContext } from "../../context/CartContext";
 
 const OrderDetail = () => {
-  const context = useContext(myContext);
-  const { getAllOrder, setLoading } = context;
+  const context = useContext(MyState);
+  const { getAllOrder, setLoading } = context || {}; // Optional chaining
   const { cartItems } = useContext(CartContext);
-
+  
   const deleteProduct = async (id) => {
     setLoading(true);
     try {

@@ -1,6 +1,4 @@
-import React, { createContext } from "react";
-/* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import {
   collection,
   deleteDoc,
@@ -16,17 +14,15 @@ export const MyContext = createContext();
 
 function MyState({ children }) {
   const [loading, setLoading] = useState(false);
-
   const [getAllProduct, setGetAllProduct] = useState([]);
-
-  /**========================================================================
-   *========================================================================**/
+  const [getAllOrder, setGetAllOrder] = useState([]);
+  const [getAllUser, setGetAllUser] = useState([]);
 
   const getAllProductFunction = async () => {
     setLoading(true);
     try {
       const q = query(collection(fireDB, "products"), orderBy("time"));
-      const data = onSnapshot(q, (QuerySnapshot) => {
+      const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
         let productArray = [];
         QuerySnapshot.forEach((doc) => {
           productArray.push({ ...doc.data(), id: doc.id });
@@ -34,23 +30,18 @@ function MyState({ children }) {
         setGetAllProduct(productArray);
         setLoading(false);
       });
-      return () => data;
+      return () => unsubscribe(); // Clean up on unmount
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
 
-  const [getAllOrder, setGetAllOrder] = useState([]);
-
-  /**============================order function============================================
-   *========================================================================**/
-
   const getAllOrderFunction = async () => {
     setLoading(true);
     try {
       const q = query(collection(fireDB, "order"), orderBy("time"));
-      const data = onSnapshot(q, (QuerySnapshot) => {
+      const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
         let orderArray = [];
         QuerySnapshot.forEach((doc) => {
           orderArray.push({ ...doc.data(), id: doc.id });
@@ -58,7 +49,7 @@ function MyState({ children }) {
         setGetAllOrder(orderArray);
         setLoading(false);
       });
-      return () => data;
+      return () => unsubscribe(); // Clean up on unmount
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -78,16 +69,11 @@ function MyState({ children }) {
     }
   };
 
-  const [getAllUser, setGetAllUser] = useState([]);
-
-  /**========================================================================
-   *========================================================================**/
-
   const getAllUserFunction = async () => {
     setLoading(true);
     try {
       const q = query(collection(fireDB, "user"), orderBy("time"));
-      const data = onSnapshot(q, (QuerySnapshot) => {
+      const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
         let userArray = [];
         QuerySnapshot.forEach((doc) => {
           userArray.push({ ...doc.data(), id: doc.id });
@@ -95,40 +81,29 @@ function MyState({ children }) {
         setGetAllUser(userArray);
         setLoading(false);
       });
-      return () => data;
+      return () => unsubscribe(); // Clean up on unmount
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
 
-  const [orders, setOrders] = useState([]);
-
-  const updateOrderStatus = (orderId, newStatus) => {
-    setOrders((prevOrders) =>
-      prevOrders.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
-    );
-  };
-
   useEffect(() => {
     getAllProductFunction();
     getAllOrderFunction();
     getAllUserFunction();
-    updateOrderStatus();
+    setLoading(false);
   }, []);
+
   return (
     <MyContext.Provider
       value={{
         loading,
         setLoading,
         getAllProduct,
-        getAllProductFunction,
         getAllOrder,
         deleteProduct,
         getAllUser,
-        updateOrderStatus,
       }}
     >
       {children}

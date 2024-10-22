@@ -3,8 +3,8 @@ import { useContext } from "react";
 import myContext from "../../context/MyState";
 
 const UserDetail = () => {
-  const context = useContext(myContext);
-  const { getAllUser } = context;
+  const context = useContext(MyState);
+  const { getAllUsers, setLoading } = context || {};
   return (
     <div>
       <div>

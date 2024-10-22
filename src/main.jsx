@@ -11,13 +11,13 @@ import MyState from "./context/MyState.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <NextUIProvider>
-      <MyState>
-        <AuthContextProvider>
-          <CartContextProvider>
+      <AuthContextProvider>
+        <CartContextProvider>
+          <MyState>
             <App />
-          </CartContextProvider>
-        </AuthContextProvider>
-      </MyState>
+          </MyState>
+        </CartContextProvider>
+      </AuthContextProvider>
     </NextUIProvider>
   </StrictMode>
 );

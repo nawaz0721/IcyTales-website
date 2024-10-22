@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import NotFound from "./NotFound";
-import MyContext from "../context/MyState";
+import { MyContext } from "../context/MyState"; // Ensure correct import here
 import { CartContext } from "../context/CartContext";
+import { doc, getDoc } from "firebase/firestore"; // Ensure these imports if you're using Firebase
 import heading2 from "../images/Background+Shadow(product detail).png";
 import heading from "../images/Related Products.png";
 import ProductsTabs from "../components/ProductsTabs";
@@ -14,7 +15,7 @@ import toast from "react-hot-toast";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
-  const { getAllProduct, loading, setLoading } = useContext(MyContext);
+  const { getAllProduct, loading, setLoading } = useContext(MyContext); // Ensure this is defined
   const {
     addToCart,
     isItemAdded,
@@ -25,16 +26,12 @@ const ProductDetail = () => {
   } = useContext(CartContext);
 
   const [product, setProduct] = useState("");
-  console.log(product);
-
   const { id } = useParams();
-
-  console.log(product);
 
   const getProductData = async () => {
     setLoading(true);
     try {
-      const productTemp = await getDoc(doc(fireDB, "products", id));
+      const productTemp = await getDoc(doc(fireDB, "products", id)); // Ensure fireDB is defined
       setProduct({ ...productTemp.data(), id: productTemp.id });
       setLoading(false);
     } catch (error) {
@@ -49,12 +46,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     getProductData();
-  }, []);
-
-  useEffect(() => {
-    console.log("Product ID from URL:", id);
-    console.log("All Products:", getAllProduct);
-  }, [getAllProduct, id]);
+  }, [id]); // Add id as a dependency
 
   if (loading) {
     return <div>Loading...</div>;
@@ -105,7 +97,7 @@ const ProductDetail = () => {
           </div>
 
           <div className="w-full md:w-1/2 p-6 my-4">
-            <h2 className="text-3xl font-semibold mb-2">{title}aa</h2>
+            <h2 className="text-3xl font-semibold mb-2">{title}</h2>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-yellow-500 text-lg">
                 {"★".repeat(Math.floor(4.2))} {/* Simulate rating stars */}
@@ -128,17 +120,15 @@ const ProductDetail = () => {
               <button
                 className="px-4 py-2 bg-gray-300 text-gray-700 rounded"
                 onClick={() => {
-                  {
-                    if (auth.currentUser) {
-                      if (auth.currentUser.email !== "admin@gmail.com") {
-                        increaseQuantity();
-                      } else {
-                        toast.error("Admin can not to add cart");
-                      }
+                  if (auth.currentUser) {
+                    if (auth.currentUser.email !== "admin@gmail.com") {
+                      increaseQuantity();
                     } else {
-                      toast.error("Please login to add to cart");
-                      navigate("/login");
+                      toast.error("Admin cannot add to cart");
                     }
+                  } else {
+                    toast.error("Please login to add to cart");
+                    navigate("/login");
                   }
                 }}
               >
@@ -153,7 +143,7 @@ const ProductDetail = () => {
                   if (auth.currentUser.email !== "admin@gmail.com") {
                     navigate("/cart");
                   } else {
-                    toast.error("Admin can not to add items");
+                    toast.error("Admin cannot add items");
                   }
                 } else {
                   toast.error("Please login to buy");
@@ -168,17 +158,15 @@ const ProductDetail = () => {
               <button
                 className=""
                 onClick={() => {
-                  {
-                    if (auth.currentUser) {
-                      if (auth.currentUser.email !== "admin@gmail.com") {
-                        addToWishList(icecreamproduct);
-                      } else {
-                        toast.error("Admin can not to add washlist");
-                      }
+                  if (auth.currentUser) {
+                    if (auth.currentUser.email !== "admin@gmail.com") {
+                      addToWishList(icecreamproduct);
                     } else {
-                      toast.error("Please login to add to wishlist");
-                      navigate("/login");
+                      toast.error("Admin cannot add to wishlist");
                     }
+                  } else {
+                    toast.error("Please login to add to wishlist");
+                    navigate("/login");
                   }
                 }}
               >
@@ -209,7 +197,7 @@ const ProductDetail = () => {
       <div className="py-6">
         <ProductSlider
           mainheading={heading}
-          subtext={"Choose from some of related products!"}
+          subtext={"Choose from some related products!"}
         />
       </div>
     </div>
